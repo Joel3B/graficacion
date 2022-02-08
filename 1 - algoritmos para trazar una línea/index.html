@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <title>Algoritmos para trazar una línea</title>
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <h1>Algoritmos para trazar una línea</h1>
+        <h5>(Hacer Zoom)</h5>
+        <div class="container">
+            <div id="nav" class="nav">
+                <div id="controls" class="controls">
+                    <div data-algorithm="0" class="button active">Básico</div>
+                    <div data-algorithm="1" class="button">DDA</div>
+                    <div data-algorithm="2" class="button">Bresenham</div>
+                </div>
+                <div id="coords"></div>
+            </div>
+            <canvas id="plano" width="300" height="300"></canvas>
+        </div>
+        <script src="js/algorithms/basic.js"></script>
+        <script src="js/algorithms/dda.js"></script>
+        <script src="js/algorithms/bresenham.js"></script>
+        <script src="js/script.js"></script>
+    </body>
+</html>
