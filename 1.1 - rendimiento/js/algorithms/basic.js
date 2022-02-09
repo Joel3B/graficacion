@@ -1,11 +1,17 @@
 function basicLine(x0, y0, x1, y1, color) {
     let m = (y1 - y0) / (x1 - x0);
 
-    if (Math.abs(m) === Infinity) {
-        m = y1;
-    }
-
     const b = y0 - m * x0;
+
+    if (x1 - x0 == 0) {
+        for (let y = y0; y <= y1; y++) {
+            setPixel(Math.round(x0), y, color);
+        }
+
+        for (let y = y1; y <= y0; y++) {
+            setPixel(Math.round(x0), y, color);
+        }
+    }
 
     for (let x = x0; x <= x1; x++) {
         let y = m * x + b;
@@ -30,6 +36,4 @@ function basicLine(x0, y0, x1, y1, color) {
 
         setPixel(Math.round(x), y, color);
     }
-
-    updateMap();
 }

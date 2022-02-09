@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rendimiento de los algoritmos (Básico, DDA, Bresenham)</title>
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <h1>Rendimiento de los algoritmos (Básico, DDA, Bresenham)</h1>
+        <div class="container">
+            <div id="nav" class="nav">
+                <div id="controls" class="controls">
+                    <div data-algorithm="0" class="button start">Iniciar</div>
+                </div>
+                <div class="timers">
+                    <div class="timer">
+                        <div class="label">Básico</div>
+                        <div id="basic" class="value">-</div>
+                    </div>
+                    <div class="timer">
+                        <div class="label">DDA</div>
+                        <div id="dda" class="value">-</div>
+                    </div>
+                    <div class="timer">
+                        <div class="label">Bresenham</div>
+                        <div id="bresenham" class="value">-</div>
+                    </div>
+                </div>
+            </div>
+            <canvas id="plano" width="1003" height="1003"></canvas>
+        </div>
+        <script src="js/algorithms/basic.js"></script>
+        <script src="js/algorithms/dda.js"></script>
+        <script src="js/algorithms/bresenham.js"></script>
+        <script src="js/script.js"></script>
+    </body>
+</html>
