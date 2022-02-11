@@ -1,4 +1,5 @@
 const controls = document.getElementById('controls');
+const controlsSquare = document.getElementById('controlsSquare');
 const coords = document.getElementById('coords');
 
 const canvas = document.getElementById('plano');
@@ -8,6 +9,7 @@ const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 const data = imgData.data;
 
 let currentAlgorithm = 0;
+let currentSquare = 0;
 
 let secondClick = false;
 
@@ -27,6 +29,21 @@ controls.addEventListener('click', function (e) {
     target.classList.add('active');
 
     currentAlgorithm = algorithm;
+});
+
+controlsSquare.addEventListener('click', function (e) {
+    const target = e.target;
+    const square = Number(target.dataset.square);
+
+    if (square === currentSquare || !target.classList.contains('button')) {
+        return;
+    }
+
+    document.querySelector(`[data-square="${currentSquare}"]`).classList.remove('active');
+
+    target.classList.add('active');
+
+    currentSquare = square;
 });
 
 canvas.addEventListener('click', function (e) {
@@ -54,15 +71,6 @@ canvas.addEventListener('click', function (e) {
             y: y,
         };
 
-        const points = [pos1.x, pos1.y, pos2.x, pos2.y];
-
-        const color = getRandomRgb();
-
-        showCords(...points, color);
-
-        // trazar cuadrado
-        const sides = 4;
-
         const pos = {
             x0: pos1.x,
             y0: pos1.y,
@@ -70,38 +78,108 @@ canvas.addEventListener('click', function (e) {
             y1: pos2.y,
         };
 
-        const x0 = pos.x0;
-        const y0 = pos.y0;
-        const x1 = pos.x1;
-        const y1 = pos.y1;
+        const color = getRandomRgb();
 
-        for (let i = 0; i < sides; i++) {
-            switch (i) {
-                case 0:
-                    pos.y1 = y0;
-                    break;
-                case 1:
-                    pos.x0 = x1;
-                    pos.y1 = y1;
-                    break;
-                case 2:
-                    pos.y0 = y1;
-                    pos.x1 = x0;
-                    break;
-                case 3:
-                    pos.x0 = x0;
-                    pos.y1 = y0;
-                    break;
-            }
+        showCords(...Object.values(pos), color);
 
-            const points = [pos.x0, pos.y0, pos.x1, pos.y1];
-
-            drawLine(points, color);
-        }
+        drawSquare(pos, color);
 
         secondClick = false;
     }
 });
+
+function squareNormal(pos, color) {
+    const sides = 4;
+
+    const x0 = pos.x0;
+    const y0 = pos.y0;
+    const x1 = pos.x1;
+    const y1 = pos.y1;
+
+    for (let i = 0; i < sides; i++) {
+        switch (i) {
+            case 0:
+                pos.y1 = y0;
+                break;
+            case 1:
+                pos.x0 = x1;
+                pos.y1 = y1;
+                break;
+            case 2:
+                pos.y0 = y1;
+                pos.x1 = x0;
+                break;
+            case 3:
+                pos.x0 = x0;
+                pos.y1 = y0;
+                break;
+        }
+
+        const points = [pos.x0, pos.y0, pos.x1, pos.y1];
+
+        drawLine(points, color);
+    }
+}
+
+function squareDiagonal(pos, color) {
+    const sides = 4;
+
+    const x0 = pos.x0;
+    const y0 = pos.y0;
+    const x1 = pos.x1;
+    const y1 = pos.y1;
+
+    const xc = (x0 + x1) / 2;
+    const yc = (y0 + y1) / 2;
+
+    const xd = (x0 - x1) / 2;
+    const yd = (y0 - y1) / 2;
+
+    const x2 = Math.round(xc - yd);
+    const y2 = Math.round(yc + xd);
+
+    const x3 = Math.round(xc + yd);
+    const y3 = Math.round(yc - xd);
+
+    for (let i = 0; i < sides; i++) {
+        switch (i) {
+            case 0:
+                pos.x0 = x2;
+                pos.y0 = y2;
+                break;
+            case 1:
+                pos.x0 = x1;
+                pos.y0 = y1;
+                pos.x1 = x3;
+                pos.y1 = y3;
+                break;
+            case 2:
+                pos.x0 = x3;
+                pos.y0 = y3;
+                pos.x1 = x0;
+                pos.y1 = y0;
+                break;
+            case 3:
+                pos.x0 = x0;
+                pos.y0 = y0;
+                pos.x1 = x2;
+                pos.y1 = y2;
+                break;
+        }
+
+        const points = [pos.x0, pos.y0, pos.x1, pos.y1];
+
+        drawLine(points, color);
+    }
+}
+
+function drawSquare(pos, color) {
+    if (currentSquare === 0) {
+        squareNormal(pos, color);
+    } else {
+        squareDiagonal(pos, color);
+    }
+}
 
 function drawLine(points, color) {
     switch (currentAlgorithm) {
@@ -143,10 +221,6 @@ function getRandomRgb() {
         g: g,
         b: b,
     };
-}
-
-function randomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function showCords(x0, y0, x1, y1, color) {
